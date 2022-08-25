@@ -24,7 +24,7 @@ You can also configure default roles for each authentication provider. Those rul
 
 ### Single sign on as an optional login method
 
-For each authentication provider a new button will be added to Pimcore's login screen:
+For each authentication provider (except for LDAP providers) a new button will be added to Pimcore's login screen:
 ![Auth provider configuration](login-screen.png)
 
 After the user clicks this button, he will get redirected to the authentication provider. There he can log in (or perhaps already is logged in). Afterwards he will get redirected to your Pimcore and logged in. Internally a usual Pimcore user will get created based on the information of the authentication provider (e.g. username, email, roles).
@@ -32,3 +32,8 @@ After the user clicks this button, he will get redirected to the authentication 
 ### Single sign on as default login method
 
 You can configure one authentication provider to be the default one. When this is done and a not logged-in user accesses `https://your-pimcore.com/admin` he will automatically get redirected to the authentication provider to login there. Afterwards he will get sent back to Pimcore backend being logged in.
+
+### LDAP
+
+For LDAP authentication providers no additional button gets added to the login screen but the normal login form gets used. With those credentials the LDAP provider gets requested and if the credentials are valid, the user gets logged in. Same as for other authentication types internally a usual Pimcore user will get created and the LDAP profile fields get applied (
+e.g. username, email).
