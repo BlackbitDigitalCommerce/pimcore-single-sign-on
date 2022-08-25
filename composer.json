@@ -1,0 +1,15 @@
+{
+  "name": "blackbit_digital_commerce/pimcore-single-sign-on",
+  "description": "Single-sign on plugin for Pimcore. Supports OpenID and LDAP. SAML and OAuth2 coming soon",
+  "version": "1.0.0",
+  "homepage": "https://pimcore.blackbit.com/",
+  "license": "GPL-3.0-or-later",
+  "type": "pimcore-bundle",
+  "authors": [
+    {
+      "name": "Blackbit",
+      "email": "info@blackbit.de",
+      "role": "Developer"
+    }
+  ]
+}
