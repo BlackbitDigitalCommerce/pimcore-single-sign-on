@@ -1,6 +1,13 @@
 # Pimcore Single Sign-on
 
-This bundle provides single-sign on support for Pimcore backend login. This allows to maintain user credentials and roles on an external auth provider. 
+This bundle provides single-sign on support for Pimcore backend login. This allows to maintain user credentials and roles on external authenticatin providers. 
+
+Delegate user management to an authentication provider has a lot of advantages:
+
+- user only has to remember one password for all used services
+- encryption and security is expected to be higher on those authentication providers as their whole business model highly depends on it
+- administration has a single system where they can create users - so nobody has to create Pimcore accounts manually
+- administration has a single system to disable users - when an employee leaves a company, you can disable all logins with a single click
 
 Currently the bundle supports OpenID and LDAP authentication providers. Support for SAML and OAuth2 will come soon.
 
