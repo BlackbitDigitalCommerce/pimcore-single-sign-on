@@ -12,9 +12,10 @@ Delegate user management to an authentication provider has a lot of advantages:
 Currently the bundle supports OpenID and LDAP authentication providers. Support for SAML and OAuth2 will come soon.
 
 OpenID is supported by a [wide range of applications](https://openid.net/certification/) like
-- [Microsoft Azure Active Directory](https://docs.vmware.com/en/Single-Sign-On-for-VMware-Tanzu-Application-Service/1.14/sso/GUID-azure-oidc-config-azure.html)
-- [Auth0](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/oidc)
-- [Google](https://developers.google.com/identity/protocols/oauth2/openid-connect)
+
+- Microsoft Azure Active Directory
+- Auth0
+- Google
 - Okta
 - and others
 
@@ -22,6 +23,8 @@ OpenID is supported by a [wide range of applications](https://openid.net/certifi
 
 Configuration can be done directly in Pimcore backend (no need to edit YAML files):
 ![Auth provider configuration](config-menu.png)
+
+The bundle gets shipped with detailed instructions how to set up auth applications at the authentication provider, where to find the necessary keys / settings and where to paste those secrets in Pimcore.
 
 You can add as many auth providers as you want (e.g. if your internal users use a different auth provider as your Pimcore agency).
 
