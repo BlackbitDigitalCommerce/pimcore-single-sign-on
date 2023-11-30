@@ -54,9 +54,9 @@ e.g. username, email).
 
 ## Single-sign on for frontend applications
 
-### Integration
-
 (The following instructions are only necessary if you want to log in to your Pimcore-based frontend application. If you only want to log in to Pimcore backend, the following section can be ignored.)
+
+### Integration
 
 To integrate single sign-on in frontend applications, you can add the following code in your Twig templates:
 
