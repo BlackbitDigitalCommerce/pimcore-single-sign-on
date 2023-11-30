@@ -54,7 +54,7 @@ e.g. username, email).
 
 ## Single-sign on for frontend applications
 
-(The following instructions are only necessary if you want to log in to your Pimcore-based frontend application. If you only want to log in to Pimcore backend, the following section can be ignored.)
+(The following instructions are only important if you want to add SSO to your Pimcore-based frontend application. If you only want to log in to Pimcore backend, the following section can be ignored.)
 
 ### Integration
 
