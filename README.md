@@ -26,6 +26,7 @@ You can buy this plugin in the [Blackbit Shop](https://shop.blackbit.com/pimcore
 ## Configuration
 
 Configuration can be done directly in Pimcore backend (no need to edit YAML files):
+
 ![Auth provider configuration](config-menu.png)
 
 The bundle gets shipped with detailed instructions how to set up auth applications at the authentication provider, where to find the necessary keys / settings and where to paste those secrets in Pimcore.
@@ -39,6 +40,7 @@ You can also configure default roles for each authentication provider. Those rul
 ### Single sign on as an optional login method
 
 For each authentication provider (except for LDAP providers) a new button will be added to Pimcore's login screen:
+
 ![Auth provider configuration](login-screen.png)
 
 After the user clicks this button, he will get redirected to the authentication provider. There he can log in (or perhaps already is logged in). Afterwards he will get redirected to your Pimcore and logged in. Internally a usual Pimcore user will get created based on the information of the authentication provider (e.g. username, email, roles).
