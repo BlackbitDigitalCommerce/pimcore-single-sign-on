@@ -19,6 +19,10 @@ OpenID is supported by a [wide range of applications](https://openid.net/certifi
 - Okta
 - and others
 
+## How to get the plugin
+
+You can buy this plugin in the [Blackbit Shop](https://shop.blackbit.com/pimcore-single-sign-on) or write an email to [info@blackbit.de](mailto:info@blackbit.de).
+
 ## Configuration
 
 Configuration can be done directly in Pimcore backend (no need to edit YAML files):
@@ -51,6 +55,8 @@ e.g. username, email).
 ## Single-sign on for frontend applications
 
 ### Integration
+
+(The following instructions are only necessary if you want to log in to your Pimcore-based frontend application. If you only want to log in to Pimcore backend, the following section can be ignored.)
 
 To integrate single sign-on in frontend applications, you can add the following code in your Twig templates:
 
