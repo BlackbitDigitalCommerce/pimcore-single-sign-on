@@ -9,7 +9,7 @@ Delegate user management to an authentication provider has a lot of advantages:
 - administration has a single system where they can create users - so nobody has to create Pimcore accounts manually
 - administration has a single system to disable users - when an employee leaves a company, you can disable all logins with a single click
 
-Currently the bundle supports OpenID and LDAP authentication providers. Support for SAML and OAuth2 will come soon.
+Currently the bundle supports OpenID, SAML and LDAP authentication providers. Support for OAuth2 will come soon.
 
 OpenID is supported by a [wide range of applications](https://openid.net/certification/) like
 
