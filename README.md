@@ -73,7 +73,7 @@ To use Azure AD as authentication provider, you have to create a new Azure AD ap
 | Given name       | given_name     |
 | Family name      | family_name    |
 | Email            | unique_name    |
-| Groups / Roles   | [groups](https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps)     |
+| Groups / Roles   | [groups](https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-fed-group-claims#add-group-claims-to-tokens-for-saml-applications-using-sso-configuration)     |
 
 ##### Other authentication providers
 
