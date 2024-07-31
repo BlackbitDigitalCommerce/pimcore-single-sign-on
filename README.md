@@ -13,7 +13,7 @@ Currently the bundle supports OpenID, SAML and LDAP authentication providers. Su
 
 OpenID is supported by a [wide range of applications](https://openid.net/certification/) like
 
-- Microsoft Azure Active Directory
+- Microsoft Azure Active Directory / Entra ID
 - Auth0
 - Google
 - Okta
