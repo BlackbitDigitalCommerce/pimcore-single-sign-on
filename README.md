@@ -64,7 +64,7 @@ To use Azure AD as authentication provider, you have to create a new Azure AD ap
 9. Select `+ New client secret`. Provide a description and an expiration length that follows your security organization’s guidelines. Then click Add.
 10. Copy the newly-created client secret and paste it in the Pimcore SSO configuration's field `Client Secret`.
 11. In Pimcore SSO configuration, as `Discovery URL` enter https://login.microsoftonline.com/[TENANT]/.well-known/openid-configuration - please replace `[TENANT]` with [your tenant id](https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-microsoft-entra-tenant).
-12. In Pimcore SSO configuration, as `Scopes` use `openid`, `profile`, `email`
+12. In Pimcore SSO configuration, as `Scopes` use `openid`, `profile`, `email` (and optionally `groups` if you want to map Entra groups to Pimcore roles)
 13. In user field mappings assign:
 
 | Pimcore field    | Azure AD field |
