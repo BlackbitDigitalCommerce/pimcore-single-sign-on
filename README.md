@@ -117,7 +117,7 @@ In addition, you can configure `Default roles`. These roles will automatically b
 
 ### Single sign on as default login method
 
-You can configure one authentication provider to be the default one. When this is done requests for Pimcore backend `https://your-pimcore.com/admin` will automatically get redirected to the authentication provider to login there. Afterwards the user will get sent back to Pimcore backend being logged in.
+You can configure one authentication provider to be the default one. When this is done, requests for Pimcore backend `https://your-pimcore.com/admin` will automatically get redirected to the authentication provider to login there. Afterwards the user will get sent back to Pimcore backend being logged in.
 
 ## Events
 
