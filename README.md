@@ -171,6 +171,29 @@ Furthermore, you can set `redirectUrl` parameter to redirect user after successf
 }}
 ```
 
+You can change the HTML output by [overriding the `@BlackbitSingleSignOn/frontend_button.html.twig` template](https://symfony.com/doc/current/bundles/override.html) - for example copy the following code to `<Pimcore root folder/templates/bundles/BlackbitSingleSignOn/frontend_button.html.twig`:
+
+```twig
+<div id="sso-button-container" class="sso-button-container">
+    {% for provider in providers %}
+        <form action="{{ path('sso_frontend_redirect') }}" method="GET">
+            {% if provider.type != "ldap" %}
+                <input type="hidden" name="provider" value="{{ provider.name }}" />
+                <button class="sso-button">{% if provider.icon %}<img src="{{ provider.icon }}"> {% endif %}{{ provider.name | trans({}, 'admin') }}</button>
+            {%  else %}
+                <input type="text" name="username" autocomplete="username" placeholder="{{ 'username'|trans([], 'admin') }}" required autofocus>
+                <input type="password" name="password" autocomplete="current-password" placeholder="{{ 'password'|trans([], 'admin') }}" required>
+                <input type="hidden" name="csrfToken" id="csrfToken" value="{{ pimcore_csrf.getCsrfToken() }}">
+
+                <button type="submit">{{ 'login'|trans([], 'admin') }}</button>
+            {% endif %}
+        </form>
+    {% endfor %}
+</div>
+```
+
+and adjust it to your needs.
+
 ### Event for successful login
 
 You can subscribe to the event `sso.logged-in` which gets triggered on a successful login.
