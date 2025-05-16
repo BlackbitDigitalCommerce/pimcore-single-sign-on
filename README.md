@@ -17,6 +17,7 @@ OpenID is supported by a [wide range of applications](https://openid.net/certifi
 - Auth0
 - Google
 - Okta
+- Keycloak
 - and others
 
 ## How to get the plugin
@@ -35,7 +36,9 @@ You can add as many auth providers as you want (e.g. if your internal users use 
 
 You can also configure default roles for each authentication provider. Those rules will get applied to newly created users. If an existing user logs in the default roles will not get applied.
 
-### Authentication provider configuration
+![SSO configuration](sso-configuration.png)
+
+### Authentication
 
 For each authentication provider (except for LDAP providers) a new button will be added to Pimcore's login screen:
 
