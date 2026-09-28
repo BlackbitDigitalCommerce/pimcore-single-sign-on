@@ -1,0 +1,264 @@
+## Configuration
+
+Configuration can be done directly in Pimcore backend under Settings > Users / Roles > Single Sign-on Configuration:
+
+![Auth provider configuration](config-menu.png)
+
+The bundle gets shipped with detailed instructions how to set up auth applications at the authentication provider, where to find the necessary keys / settings and where to paste those secrets in Pimcore.
+
+You can add as many auth providers as you want (e.g. if your internal users use a different auth provider as your Pimcore agency).
+
+You can also configure default roles for each authentication provider. Those rules will get applied to newly created users. If an existing user logs in the default roles will not get applied.
+
+![SSO configuration](sso-configuration.png)
+
+### Authentication
+
+For each authentication provider (except for LDAP providers) a new button will be added to Pimcore's login screen:
+
+![Auth provider configuration](login-screen.png)
+
+After the user clicks this button, he will get redirected to the authentication provider. There he can log in (or perhaps already is logged in). Afterwards he will get redirected to your Pimcore and logged in. Internally a usual Pimcore user will get created based on the information of the authentication provider (e.g. username, email, roles).
+
+#### OpenID
+
+On the auth provider site you have you create an application with `https://your-pimcore.com/sso/redirect` as callback URL. The remaining configuration settings depend on the used auth provider.
+
+Information about OpenID configuration for certain auth providers:
+
+##### Microsoft Azure Active Directory
+
+To use Azure AD as authentication provider, you have to create a new Azure AD app:
+
+1. Log in to your Azure account and navigate to Azure Active Directory > App registrations.
+2. Select `+ New registration` to create a new app.
+3. Enter a name of your choice in the `Name` field.
+4. Set `Redirect URI` to https://your-pimcore.com/sso/redirect - please replace the domain name to your real one.
+5. Click `Register`
+6. Copy the `Application (client) ID` from the app configuration page and paste it in the Pimcore SSO configuration's field `Client ID`.
+7. Navigate to the app’s configuration page. If you just completed the previous step, you should already be on this page. Otherwise, search for your app name in the App registrations list.
+8. Select `Certificates & secrets`.
+9. Select `+ New client secret`. Provide a description and an expiration length that follows your security organization’s guidelines. Then click Add.
+10. Copy the newly-created client secret and paste it in the Pimcore SSO configuration's field `Client Secret`.
+11. In Pimcore SSO configuration, as `Discovery URL` enter https://login.microsoftonline.com/[TENANT]/.well-known/openid-configuration - please replace `[TENANT]` with [your tenant id](https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-microsoft-entra-tenant).
+12. In Pimcore SSO configuration, as `Scopes` use `openid`, `profile`, `email` (and optionally [`groups`](https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-fed-group-claims#add-group-claims-to-tokens-for-saml-applications-using-sso-configuration) if you want to map Azure AD / Entra ID groups to Pimcore roles)
+13. In user field mappings assign:
+
+| Pimcore field    | Azure AD field |
+|------------------|----------------|
+| Username / login | unique_name    |
+| Given name       | given_name     |
+| Family name      | family_name    |
+| Email            | unique_name    |
+| Groups / Roles   | [groups](https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-fed-group-claims#add-group-claims-to-tokens-for-saml-applications-using-sso-configuration)     |
+
+##### Other authentication providers
+
+- [Auth0](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/oidc)
+- [Google](https://developers.google.com/identity/protocols/oauth2/openid-connect)
+
+If you are not sure what to enter, please write an email to help@blackbit.de.
+
+After configuration there will be an additional button on the Pimcore login page. This can be used to authenticate on the auth provider site and then be redirected and logged in to Pimcore.
+
+If you choose a `Default Provider` you will automatically get redirected to the auth provider's login page when you access `https://your-pimcore.com/admin`.
+
+#### LDAP
+
+For LDAP authentication providers no additional button gets added to the login screen but the normal login form gets used. With those credentials the LDAP provider gets requested and if the credentials are valid, the user gets logged in. Same as for other authentication types internally a usual
+Pimcore user will get created and the LDAP profile fields get applied (
+e.g. username, email).
+
+When using LDAP as an authentication provider, you have to configure
+
+* `Host`: IP or hostname of the LDAP server (example: ldap.site.com).
+* `Base DN`: Base DN for the directory (example: dc=example,dc=com).
+* `Search DN`: (Read-only) user's DN, which will be used to authenticate against the LDAP server in order to fetch the user's information (example: cn=your_search_dn_user,ou=users,dc=example,dc=com).
+* `Encryption`: The encryption protocol: ssl or tls.
+
+If it does not work, please ensure that on your server `libldap-common` is installed.
+
+#### SAML
+
+When using SAML as an authentication provider, you have to configure
+
+* `Entity ID`: The entity ID of the SAML provider. This is also known as the Identity Provider Issuer or Issuer URL (example: `http://<YourOktaDomain>/<OktaAppID>: like exk1xxxxxxxxx>`).
+* `ACS URL`: The Assertion Consumer Service URL, also called the Single Sign-On or SAML Post URL. This is the URL where the SAML provider will send the authentication response to (example: `http://<YourOktaDomain>/<OktaAppID>/sso/saml`).
+* `X509 Certificate`: The X.509 certificate of the SAML provider.
+
+On the auth provider site you have to create an application with the next settings (**note**: settings names may vary depending on the auth provider, example for Okta):
+* `Single Sign On URL`: `https://your-pimcore.com/sso/saml/acs`
+* `Recipient URL`: `https://your-pimcore.com/sso/saml/acs`
+* `Destination URL`: `https://your-pimcore.com/sso/saml/acs`
+* `Audience Restriction`: `https://your-pimcore.com/sso/saml/metadata`
+
+### Mapping Authentication provider data to Pimcore user
+
+You can map the fields which get provided by the configured authentication providers to update the corresponding Pimcore user's account data, for example to keep email address up-to-date or to assign roles.
+
+#### Role mapping
+
+Mapped `Groups / Roles` will automatically be assigned as roles to the just logged-in user. Non-existing roles will automatically get created (at first without any permissions).
+
+In addition, you can configure `Default roles`. These roles will automatically be assigned to *newly created* users. They do not get applied to already existing users.
+
+### Single sign on as default login method
+
+You can configure one authentication provider to be the default one. When this is done, requests for Pimcore backend `https://your-pimcore.com/admin` will automatically get redirected to the authentication provider to login there. Afterwards the user will get sent back to Pimcore backend being logged in.
+
+## Events
+
+### sso.logged-in
+
+The `sso.logged-in` event gets triggered on successful login. The following event arguments get provided:
+
+- `user`: The found / created `\Pimcore\Model\User` object
+- `data`: Associative array with all data which got returned from authentication provider
+- `savePimcoreUser`: boolean value to define if the Pimcore user should get saved (default: true)
+- `provider`: The name of the used SSO provider (as configured in Pimcore backend)
+
+## Single-sign on for frontend applications
+
+(The following instructions are only important if you want to add SSO to your Pimcore-based frontend application (= website). If you only want to log in to Pimcore backend, the following section can be ignored.)
+
+### Integration
+
+To integrate single sign-on in frontend applications, you can add the following code in your Twig templates:
+
+```twig
+{{ 
+  render(controller(
+    'Blackbit\\SingleSignOnBundle\\Controller\\IdentityController:frontendProvidersAction'
+  ))
+}}
+```
+
+If you want to get auth provider data as JSON, please use `json` parameter with value `true`. If `json` not provided, buttons will be shown as html.
+
+```twig
+{% set authProviders %}
+  {{  
+    render(controller(
+      'Blackbit\\SingleSignOnBundle\\Controller\\IdentityController:frontendProvidersAction', 
+      { 'json': true }
+    ))
+  }}
+{% endset %}
+window.location.href = {{ path('sso_frontend_redirect', {'provider': authProviders[0].name }) }};
+```
+
+Furthermore, you can set `redirectUrl` parameter to redirect user after successful login. If `redirectUrl` is not provided, the user will get redirected to the requested page - if this is not available (because the login page was called without referer), it will redirect to default URL `/` (start page).
+
+```twig
+{{  
+  render(controller(
+    'Blackbit\\SingleSignOnBundle\\Controller\\IdentityController:frontendProvidersAction', 
+    { 'json': false, 'redirectUrl': '/en/test' }
+  ))
+}}
+```
+
+You can change the HTML output by [overriding the `@BlackbitSingleSignOn/frontend_button.html.twig` template](https://symfony.com/doc/current/bundles/override.html) - for example copy the following code to `<Pimcore root folder/templates/bundles/BlackbitSingleSignOn/frontend_button.html.twig`:
+
+```twig
+<div id="sso-button-container" class="sso-button-container">
+    {% for provider in providers %}
+        <form action="{{ path('sso_frontend_redirect') }}" method="GET">
+            {% if provider.type != "ldap" %}
+                <input type="hidden" name="provider" value="{{ provider.name }}" />
+                <button class="sso-button">{% if provider.icon %}<img src="{{ provider.icon }}"> {% endif %}{{ provider.name | trans({}, 'admin') }}</button>
+            {%  else %}
+                <input type="text" name="username" autocomplete="username" placeholder="{{ 'username'|trans([], 'admin') }}" required autofocus>
+                <input type="password" name="password" autocomplete="current-password" placeholder="{{ 'password'|trans([], 'admin') }}" required>
+                <input type="hidden" name="csrfToken" id="csrfToken" value="{{ pimcore_csrf.getCsrfToken() }}">
+
+                <button type="submit">{{ 'login'|trans([], 'admin') }}</button>
+            {% endif %}
+        </form>
+    {% endfor %}
+</div>
+```
+
+and adjust it to your needs.
+
+### Event for successful login
+
+You can subscribe to the event `sso.logged-in` which gets triggered on a successful login.
+
+For example, in `services.yaml` register your event subscriber
+
+```
+App\EventListener\SsoLoginListener:
+    tags:
+        - { name: kernel.event_listener, event: sso.logged-in, method: onSuccessLogin }
+```
+
+Then create `SsoLoginListener` class in `src\EventListener` folder with following code:
+
+```php
+namespace App\EventListener;
+
+use Pimcore\Model\User;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
+class SsoLoginListener {
+    private $tokenStorage;
+    
+    public function __construct(TokenStorageInterface $tokenStorage) {
+        $this->tokenStorage = $tokenStorage;
+    }
+    
+    public function onSuccessLogin (GenericEvent $e) {
+        /** @var User $user */
+        $user = $e->getArgument('user');
+        
+        // change user data
+        $user->setEmail('test@example.org');
+        
+        // or even use a user object of a different class
+        $user = new \Pimcore\Model\DataObject\CustomUser();
+        $user->setUsername($user->getUsername());
+        $user->setPassword($user->getPassword()); // this is a random one-time password which gets reset on every login
+        
+        // log user in
+        $token = new UsernamePasswordToken($user, 'frontend_firewall_name', $user->getRoles());
+        $this->tokenStorage->setToken($token);
+    }
+}
+```
+
+### Authorization check
+
+To check if a user is logged in, you can use the `SingleSignOnTrait` in your controller:
+
+```php
+class MyController {
+  use \Blackbit\SingleSignOnBundle\Controller\SingleSignOnTrait;
+  
+  public function myAction(\Symfony\Component\HttpFoundation\Request $request) {
+    try {
+        $this->guardLoggedIn($request);
+    } catch(\Exception $e) {
+        return $this->redirectToRoute('login'); // customize the route name for the login page here
+    }
+  }
+}
+```
+
+### Logout
+
+For logout you can use the `SingleSignOnTrait`:
+
+```php
+class MyController {
+  use \Blackbit\SingleSignOnBundle\Controller\SingleSignOnTrait;
+  
+  public function logoutAction(\Symfony\Component\HttpFoundation\Request $request) {
+    $this->logout($request);
+    
+    return $this->redirectToRoute('login'); // customize the route name for the logout page here
+  }
+}
+```
